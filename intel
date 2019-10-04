@@ -1,0 +1,43 @@
+***2D
+To combat the rarity of tumor patches, we apply several data augmentations.
+First, we rotate the input patch by 4 multiples of 90◦
+, apply a left-right flip
+and repeat the rotations. All 8 orientations are valid because pathology slides
+do not have canonical orientations. Next, we use TensorFlow’s image library
+(tensorflow.image.random X ) to perturb color: brightness with a maximum delta
+of 64/255, saturation with a maximum delta of 0.25, hue with a maximum delta
+of 0.04, and contrast with a maximum delta of 0.75. Lastly, we add jitter to the
+patch extraction process such that each patch has a small x,y offset of up to 8
+pixels. The magnitudes of the color perturbations and jitter were lightly tuned
+using our validation set. Pixel values are clipped to [0, 1] and scaled to [−1, 1].
+We run inference across the slide in a sliding window with a stride of 128
+to match the center region’s size. For each patch, we apply the rotations and
+left-right flip to obtain predictions for each of the 8 orientations, and average
+the 8 predictions.
+
+We trained our networks with stochastic gradient
+descent in TensorFlow [2], with 8 replicas each running on a NVIDIA Pascal GPU
+with asynchronous gradient updates and batch size of 32 per replica. We used
+RMSProp [21] with momentum of 0.9, decay of 0.9 and  = 1.0. The initial
+learning rate was 0.05, with a decay of 0.5 every 2 million examples. For refining
+a model pretrained on ImageNet, we used an initial learning rate of 0.002.
+
+Finally, we experimented with ensembling models in two ways. First, averaging predictions across the 8 rotations/flips yielded a few percent improvement in
+the metrics. Second, ensembling across independently trained models yield additional but smaller improvements, and gave diminishing returns after 3 models.
+
+***3D
+full connected conditional random field (CRF) (as post-processing to remove false positives) ???
+Xavier68 weight initialization method. The Xavier initializer is designed to keep the scale of the gradients roughly the same in all layers. This prevents the vanishing gradient69, enabling effective learning
+
+
+patho avec nifty non lisible:
+99Y8w5i
+hvd3c2p
+tsJ1PIa
+
+def load_normalized_nifti(filename):
+    nifti = nib.load(filename)
+    #print(nib.aff2axcodes(nifti.affine))
+    nifti = nib.as_closest_canonical(nifti)
+    #print(nib.aff2axcodes(nifti.affine))
+    return nifti
