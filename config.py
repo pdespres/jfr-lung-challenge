@@ -1,0 +1,26 @@
+config = {'mode':'dev',
+          'stage1_data_path':'/work/DataBowl3/stage1/stage1/',
+          'luna_raw':"./data/luna sample/",
+          'luna_segment':'../jfr-data/seg-lungs-LUNA16',
+          
+          'luna_data':'/work/DataBowl3/luna/allset',
+          'preprocess_result_path':'./data/preprocess/',       
+          
+          'luna_abbr':'./detector/labels/shorter.csv',
+          'luna_label':'./data/annotations.csv',
+          'stage1_annos_path':['./detector/labels/label_job5.csv',
+                './detector/labels/label_job4_2.csv',
+                './detector/labels/label_job4_1.csv',
+                './detector/labels/label_job0.csv',
+                './detector/labels/label_qualified.csv'],
+          'bbox_path':'../detector/results/res18/bbox/',
+          'preprocessing_backend':'python',
+          'finished_flag':'.flag_finished',
+          'pp_resolution':'[1.,1.,1.]',
+          'pp_normalize_max':'600',
+          'pp_normalize_min':'-1200',
+          'pp_center_pixel_mean':'0.25',
+          'pp_box_margin':'5',
+          'pp_pad_value':'170',
+          'pp_bone_threshold':'210'
+         }
