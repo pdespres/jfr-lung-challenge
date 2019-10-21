@@ -69,7 +69,7 @@ def resample(image, old_spacing, new_spacing):
     new_shape = np.round(new_real_shape).astype(np.int16)
 
     # Avec skimage
-    image =  transform.resize(image, new_shape, order=1, clip=True, mode='edge', preserve_range=True)
+    image =  transform.resize(image.astype(float), new_shape, order=1, clip=True, mode='edge', preserve_range=True) > 0
 
     return image, new_spacing
 
